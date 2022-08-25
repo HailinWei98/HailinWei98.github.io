@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>SCREEN</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+</style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="SCREEN.html">SCREEN</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="alignment.html">Alignment</a>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+            scRNA-seq
+             
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu" role="menu">
+            <li>
+              <a href="RNA.html">Gene perturbation</a>
+            </li>
+            <li>
+              <a href="ORF.html">ORF perturbation</a>
+            </li>
+            <li>
+              <a href="enhancer.html">Enhancer perturbation</a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="ATAC.html">scATAC-seq</a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/HailinWei98/SCREEN">
+    <span class="fa fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore"><strong>SCREEN</strong></h1>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2021-09-23
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>SCREEN/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20210907code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20210907)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20210907code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20210907)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomHailinWei98SCREENtreedc5b2b27c0e24a9420f74a8c2a2e30c847fa6076targetblankdc5b2b2a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/HailinWei98/SCREEN/tree/dc5b2b27c0e24a9420f74a8c2a2e30c847fa6076" target="_blank">dc5b2b2</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomHailinWei98SCREENtreedc5b2b27c0e24a9420f74a8c2a2e30c847fa6076targetblankdc5b2b2a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/HailinWei98/SCREEN/tree/dc5b2b27c0e24a9420f74a8c2a2e30c847fa6076" target="_blank">dc5b2b2</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+
+Untracked files:
+    Untracked:  data/workflow.png
+    Untracked:  img/
+    Untracked:  output/workflow.png
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/SCREEN.Rmd</code>) and HTML (<code>docs/SCREEN.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/HailinWei98/SCREEN/2c16336e7907134ed6b44f5232dcff325586db1c/docs/SCREEN.html" target="_blank">2c16336</a>
+</td>
+<td>
+HailinWei98
+</td>
+<td>
+2021-09-23
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/HailinWei98/SCREEN/blob/a2a5b0a1202aa108ab0750208f45cd85d8665385/analysis/SCREEN.Rmd" target="_blank">a2a5b0a</a>
+</td>
+<td>
+HailinWei98
+</td>
+<td>
+2021-09-23
+</td>
+<td>
+Publish the initial files for myproject
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/HailinWei98/SCREEN/eeeebf3a496f7b67059be35871ae092db0f6d933/docs/SCREEN.html" target="_blank">eeeebf3</a>
+</td>
+<td>
+HailinWei98
+</td>
+<td>
+2021-09-23
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/HailinWei98/SCREEN/blob/94450d15ee4aa807a06ebcf1cb2096ca2b7f2b84/analysis/SCREEN.Rmd" target="_blank">94450d1</a>
+</td>
+<td>
+HailinWei98
+</td>
+<td>
+2021-09-23
+</td>
+<td>
+Publish the initial files for myproject
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/HailinWei98/SCREEN/94450d15ee4aa807a06ebcf1cb2096ca2b7f2b84/docs/SCREEN.html" target="_blank">94450d1</a>
+</td>
+<td>
+HailinWei98
+</td>
+<td>
+2021-09-23
+</td>
+<td>
+Publish the initial files for myproject
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/HailinWei98/SCREEN/518a5cacf3a46144afd24003ecf6a3a12ab7f80d/docs/SCREEN.html" target="_blank">518a5ca</a>
+</td>
+<td>
+HailinWei98
+</td>
+<td>
+2021-09-22
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/HailinWei98/SCREEN/blob/ab04ccf84f185bba13ce6d101eeae6c1ab1b290a/analysis/SCREEN.Rmd" target="_blank">ab04ccf</a>
+</td>
+<td>
+HailinWei98
+</td>
+<td>
+2021-09-22
+</td>
+<td>
+Publish the initial files for myproject
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/HailinWei98/SCREEN/855bd746a9419db56fd3d582b93134175f892b38/docs/SCREEN.html" target="_blank">855bd74</a>
+</td>
+<td>
+HailinWei98
+</td>
+<td>
+2021-09-22
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/HailinWei98/SCREEN/blob/e582e5c4c363a978a4946ec77996a51d0ffa4b80/analysis/SCREEN.Rmd" target="_blank">e582e5c</a>
+</td>
+<td>
+HailinWei98
+</td>
+<td>
+2021-09-22
+</td>
+<td>
+Publish the initial files for myproject
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<p>Gene perturbation of scRNA-seq means that the targeted regions of sgRNA design is known gene region. And after perturbation, scRNA-seq is performed.</p>
+<h3>
+<strong>Quality control and sgRNA information visualization</strong>
+</h3>
+<p>Library needed packages</p>
+<pre class="r"><code>library(SCREEN)
+library(Seurat)
+library(stringi)
+library(ggplot2)
+library(plyr)
+library(stringr)
+library(hdf5r)
+library(ggrepel)
+library(clusterProfiler)
+library(org.Hs.eg.db)
+library(rtracklayer)
+library(pheatmap)
+library(psych)
+</code></pre>
+
+<p>Add meta data(perturbations, percent.mt and replicate information) to the SeuratObject</p>
+<pre class="r"><code>replicate <- read.table("example/RNA/replicate.txt", header = F)
+mtx &lt;- Add_meta_data(sg_dir = &quot;example/RNA/sg_lib_all.txt&quot;, mtx_dir = &quot;example/RNA/perturb.rds&quot;, species = &quot;Hs&quot;, replicate = replicate)
+</code></pre>
+
+<p>Single-cell quality control</p>
+<pre class="r"><code>mtx_QC &lt;- scQC(mtx_dir = mtx, species = &quot;Hs&quot;, prefix = &quot;./&quot;, label = &quot;&quot;, gene_frac = 0.01, nFeature = c(200, 100000), nCount = 1000, mt = 10, blank_NTC = FALSE)
+</code></pre>
+
+<p>Plot sgRNA information</p>
+<pre class="r"><code>sgRNA_quality_plot(sg_dir = &quot;example/RNA/sg_lib_all.txt&quot;, mtx_dir = mtx, prefix = &quot;./&quot;, LABEL = &quot;&quot;)
+</code></pre>
+<br/>
+<center>
+<table>
+<tr>
+<td>
+<img src = "img/sgRNA_quality1.png" width = 300 height = 300></img>
+</td>
+<td>
+<img src = "img/sgRNA_quality2.png" width = 300 height = 300></img>
+</td>
+</tr>
+</table>
+</center>
+<p><br/></p>
+<h3>
+  <strong>KO efficiency evaluation</strong>
+</h3>
+<p><code>Mixscape</code> is an optional function to calculate KO efficiency of each sgRNA, because it takes cells with only one sgRNA as input and has a requirement for input cell numbers. SCREEN integrate tutorial of Mixscape and our perturbations enrichment calculating functions into one simple function.<br/></p>
+<pre class="r"><code>mixscape &lt;- IntegratedMixscape(sg_dir = &quot;example/RNA/sg_lib_all.txt&quot;, mtx_dir = mtx_QC, NTC = &quot;NTC&quot;, prefix = &quot;./&quot;, label = &quot;&quot;)</code></pre>
+<br/>
+<center>
+<img src = "img/Mixscape.png" width = 300 height = 300>
+</center>
+<p>As Mixscape calculate perturb signature for each cell labeled with perturbation, SCREEN compare the clustering results and perturbation ratio of each cluster to evaluate KO efficiency of each perturbation from another point of view.</p>
+<center>
+<table>
+<tr>
+<td>
+<img src = "img/cluster.png" width = 300 height = 300></img>
+</td>
+<td>
+<img src = "img/perturb_before.png" width = 300 height = 300></img>
+</td>
+<td>
+<img src = "img/perturb_after.png" width = 300 height = 300></img>
+</td>
+</tr>
+</table>
+</center>
+<h3>
+  <strong>Regulatory score estimation</strong>
+</h3>
+<p><code>improved_scmageck_lr</code> is a function derived from <code>scmageck_lr</code> of <strong>scMAGeCK</strong> package. The input of <code>improved_scmageck_lr</code> is scaled matrix while the input of <code>scmageck_lr</code> is a normalized and scaled <code>SeuratObject</code>. The output of <code>improved_scmageck_lr</code> are transposed matrix of <code>scmageck_lr</code> output.</p>
+<p>Normalize and scale count matrix after filtering</p>
+<pre class="r"><code>mtx_QC &lt;- normalize_scale(mtx_dir = mtx_QC)</code></pre>
+
+<p>Get scale.data matrix</p>
+<pre class="r"><code>mtx_QC &lt;- GetAssayData(object = mtx_QC, slot = &quot;scale.data&quot;)
+</code></pre>
+
+<p>Running scMAGeCK_lr to evaluate regulatory score of each perturbation to each gene</p>
+<pre class="r"><code>results &lt;- improved_scmageck_lr(BARCODE = &quot;example/RNA/sg_lib_all.txt&quot;, RDS = mtx_QC, NEGCTRL = &quot;NTC&quot;, SELECT_GENE = NULL, LABEL = &quot;improved&quot;, PERMUTATION = 10000, SAVEPATH = &quot;./&quot;, LAMBDA = 0.01)
+</code></pre>
+
+<p>Plot DE gene number</p>
+<pre class="r"><code>DE_gene_plot(score_dir = results[[1]], pval_dir = results[[2]], project = &quot;RNA_example&quot;, prefix = &quot;./&quot;, label = &quot;&quot;, p_val_cut = 0.05, score_cut = 0.5, ylimit = &quot;auto&quot;)
+</code></pre>
+<br/>
+<center>
+<img src = "img/DE_gene_num.png" width = 300 height = 300>
+</center>
+<p>Visualize distribution of regulatory score and its p-value via volcano plot: </p>
+<pre class="r"><code>volcano(score_dir = results[[1]], pval_dir = results[[2]], prefix = &quot;./&quot;, label = &quot;&quot;, score_cut = 0.5)</code></pre>
+<br/>
+<center>
+<img src = "img/volcano.png" width = 300 height = 300>
+</center>
+<p>Calculate and visualize correlation between perturbations: </p>
+<pre class="r"><code>heatmap(score_dir = results[[1]], pval_dir = results[[2]], prefix = &quot;./&quot;, label = &quot;&quot;, score_cut = 0.5, p_val_cut = 0.05, num = 0)</code></pre>
+<br/>
+<center>
+<img src = "img/heatmap.png" width = 300 height = 300>
+</center>
+<p>GO enrichment: </p>
+<pre class="r"><code>GOenrichment(score_dir = results[[1]], pval_dir = results[[2]], prefix = &quot;./&quot;, score_cut = 0.5, p_val_cut = 0.05, DE_gene_to_use = "all", database = "org.Hs.eg.db", gene_type = "Symbol", showCategory = 10)</code></pre>
+<br/>
+<center>
+<img src = "img/GO.png" width = 600 height = 300>
+</center>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.0.2 (2020-06-22)
+Platform: x86_64-apple-darwin17.0 (64-bit)
+Running under: macOS Catalina 10.15.7
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRblas.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRlapack.dylib
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] workflowr_1.6.2
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_1.0.7        whisker_0.4       knitr_1.33        magrittr_2.0.1   
+ [5] R6_2.5.0          rlang_0.4.11      fansi_0.5.0       stringr_1.4.0    
+ [9] tools_4.0.2       xfun_0.25         utf8_1.2.2        git2r_0.28.0     
+[13] jquerylib_0.1.4   htmltools_0.5.1.1 ellipsis_0.3.2    rprojroot_2.0.2  
+[17] yaml_2.2.1        digest_0.6.27     tibble_3.1.3      lifecycle_1.0.0  
+[21] crayon_1.4.1      later_1.2.0       sass_0.4.0        vctrs_0.3.8      
+[25] promises_1.2.0.1  fs_1.5.0          glue_1.4.2        evaluate_0.14    
+[29] rmarkdown_2.10    stringi_1.7.3     bslib_0.2.5.1     compiler_4.0.2   
+[33] pillar_1.6.2      jsonlite_1.7.2    httpuv_1.6.1      pkgconfig_2.0.3  </code></pre>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+<script>
+
+  // add bootstrap table styles to pandoc tables
+  function bootstrapStylePandocTables() {
+    $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+  }
+  $(document).ready(function () {
+    bootstrapStylePandocTables();
+  });
+  
+  
+  </script>
+
+</div>
+</div>
+
+</div>
+
+
+</body>
+</html>
