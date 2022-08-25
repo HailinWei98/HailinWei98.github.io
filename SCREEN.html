@@ -15,7 +15,7 @@
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -28,9 +28,6 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
-<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
-<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -52,7 +49,7 @@ div.section {
   div.column{display: inline-block; vertical-align: top; width: 50%;}
   div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
   ul.task-list{list-style: none;}
-    </style>
+</style>
 
 <style type="text/css">code{white-space: pre;}</style>
 <script type="text/javascript">
@@ -64,13 +61,6 @@ if (window.hljs) {
   }
 }
 </script>
-
-
-
-
-
-
-
 
 <style type = "text/css">
 .main-container {
@@ -226,93 +216,12 @@ $(document).ready(function () {
 }
 </style>
 
-<!-- code folding -->
-
-
-
-<style type="text/css">
-
-#TOC {
-  margin: 25px 0px 20px 0px;
-}
-@media (max-width: 768px) {
-#TOC {
-  position: relative;
-  width: 100%;
-}
-}
-
-@media print {
-.toc-content {
-  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
-  float: right;
-}
-}
-
-.toc-content {
-  padding-left: 30px;
-  padding-right: 40px;
-}
-
-div.main-container {
-  max-width: 1200px;
-}
-
-div.tocify {
-  width: 20%;
-  max-width: 260px;
-  max-height: 85%;
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  div.tocify {
-    width: 25%;
-  }
-}
-
-@media (max-width: 767px) {
-  div.tocify {
-    width: 100%;
-    max-width: none;
-  }
-}
-
-.tocify ul, .tocify li {
-  line-height: 20px;
-}
-
-.tocify-subheader .tocify-item {
-  font-size: 0.90em;
-}
-
-.tocify .list-group-item {
-  border-radius: 0px;
-}
-
-
-</style>
-
-
-
 </head>
 
 <body>
 
 
 <div class="container-fluid main-container">
-
-
-<!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row">
-<div class="col-xs-12 col-sm-4 col-md-3">
-<div id="TOC" class="tocify">
-</div>
-</div>
-
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
-
-
-
 
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
@@ -327,14 +236,29 @@ div.tocify {
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="index.html">Home</a>
-</li>
-<li>
-  <a href="about.html">About</a>
-</li>
-<li>
-  <a href="license.html">License</a>
-</li>
+          <a href="alignment.html">Alignment</a>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+            scRNA-seq
+             
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu" role="menu">
+            <li>
+              <a href="RNA.html">Gene perturbation</a>
+            </li>
+            <li>
+              <a href="ORF.html">ORF perturbation</a>
+            </li>
+            <li>
+              <a href="enhancer.html">Enhancer perturbation</a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="ATAC.html">scATAC-seq</a>
+        </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -353,7 +277,7 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">SCREEN</h1>
+<h1 class="title toc-ignore"><strong>SCREEN</strong></h1>
 
 </div>
 
@@ -690,169 +614,126 @@ Publish the initial files for myproject
 </div>
 </div>
 <p>
-<strong>SCREEN</strong>(<strong>S</strong>ingle-cell <strong>C</strong>RISPR sc<strong>RE</strong>en data analyses and p<strong>E</strong>rturbation modeli<strong>N</strong>g) is a pipeline to visualize the quality of single-cell CRISPR screens RNA-seq/ATAC-seq datasets. SCREEN has integrated three R functions: scMAGeCK_lr, Mixscape and plot function of cicero. These functions are used to estimate the regulatory score between perturbations and genes, estimate the perturbation efficiency and visualize enhancer regulatory potential, respectively.
+<strong>SCREEN</strong>(<strong>S</strong>ingle-cell <strong>C</strong>RISPR sc<strong>RE</strong>en data analyses and p<strong>E</strong>rturbation modeli<strong>N</strong>g) is a comprehensive pipeline to visualize data quality and model perturbation effect of single-cell CRISPR screens RNA-seq/ATAC-seq datasets. SCREEN has integrated three R functions: scMAGeCK_lr, Mixscape and plot function of cicero. These functions are used to model the regulatory score between perturbations and genes, estimate the perturbation efficiency of each perturbation and visualize enhancer potential targets, respectively.
 </p>
 <h2>
 <strong>Schema</strong>
 </h2>
 <center>
-<img src = "img/workflow.png" width="500" height="800"></img>
+<img src = "img/workflow.png" width="500" height="400"></img>
 </center>
 <h2>
 <strong>Usage</strong>
 </h2>
-<p><br/></p>
-<h3>
-<strong>Gene perturbation</strong>
-</h3>
-<p><br/></p>
-<p>“Gene perturbation” means traditional gene KO or CRISPRi/CRISPRa, followed by scRNA-seq. In this condition, sgRNAs are designed for targeted genes. <br/></p>
-<pre class="r"><code>library(SCREEN)
-
-#Add meta data(perturbations, percent.mt and replicate information) to the SeuratObject
-
-mtx&lt;- Add_meta_data(sg_dir = &quot;example/RNA/sg_lib_all.txt&quot;, mtx_dir = &quot;example/RNA/perturb.rds&quot;, species = &quot;Hs&quot;)
-
-#Single-cell quality control
-
-mtx_QC&lt;- scQC(mtx_dir = mtx, species = &quot;Hs&quot;, prefix = &quot;./&quot;, label = &quot;&quot;, gene_frac = 0.01, nFeature = c(200, 5000), nCount = 1000, mt = 10, blank_NTC = FALSE)
-
-#Plot perturbation quality
-
-sgRNA_quality_plot(sg_dir = &quot;example/RNA/sg_lib_all.txt&quot;, mtx_dir = mtx, prefix = &quot;./&quot;, LABEL = &quot;&quot;)</code></pre>
-<br/>
-<center>
+<p><br/>SCREEN provide two major functions, <strong>alignment</strong> and <strong>analysis</strong>. To get a full list of commands and descriptions of the alignment part: <br/></p>
+<pre class="bash"><code>SCREEN
+  
+usage: SCREEN [--help/-h][--type/-t][--fasta/-f][--gtf/-g][--10XreferenceConfig/-r][--10Xcsv/-c][--input/-i][--output/-o][--localcores][--localmem]
+</code></pre>
 <table>
-<tr>
-<td>
-<img src = "img/sgRNA_quality1.png" width = 300 height = 300></img>
-</td>
-<td>
-<img src = "img/sgRNA_quality2.png" width = 300 height = 300></img>
-</td>
+  <colgroup>
+  <col width="52%" />
+  <col width="47%" />
+  </colgroup>
+  <thead>
+  <tr class="header">
+  <th>Options</th>
+  <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr class="odd">
+  <td><code>--help/-h</code></td>
+  <td>Show this help message and exit.</td>
+  </tr>
+  <tr class="even">
+  <td><code>--type/-t</code></td>
+  <td>Input data type, can be one of RNA/ATAC, only support scATAC-seq or scRNA-seq.</td>
+  </tr>
+  <tr class="odd">
+  <td><code>--fasta/-f</code></td>
+  <td>File path of reference in FASTA format. For 10X-like input, this parameter can be omitted.</td>
+  </tr>
+  <tr class="even">
+  <td><code>--gtf/-g</code></td>
+  <td>File path of reference in gtf format. For 10X-like input, this parameter can be omitted.</td>
+  </tr>
+  <tr class="odd">
+  <td><code>--10Xreference/-r</code></td>
+  <td>File path of config csv file which include reference and library information. Only used for 10X-like input.</td>
+  </tr>
+  <tr class="even">
+  <td><code>--10Xcsv/-c</code></td>
+  <td>File path of sgRNA reference in csv format. Only used for 10X-like input.</td>
+  </tr>
+  <tr class="odd">
+  <td><code>--input/-i</code></td>
+  <td>File path of fastq files with correct names, required by cellranger.</td>
+  </tr>
+  <tr class="even">
+  <td><code>--output/-o</code></td>
+  <td>Directory name of output files.</td>
+  </tr>
+  <tr class="odd">
+  <td><code>--localcores</code></td>
+  <td>Set max cores the pipeline may request at one time. Only applies to local jobs.</td>
+  </tr>
+  <tr class="even">
+  <td><code>--localmem</code></td>
+  <td>Set max GB the pipeline may request at one time. Only applies to local jobs.</td>
+  </tr>
+  </tbody>
 </table>
-</tr>
-</center>
-<p><br/></p>
-<p><code>Mixscape</code> is an optional function, because it takes cells with only one sgRNA as input and has a requirement for input cell numbers.<br/></p>
-<pre class="r"><code>#Running Mixscape
-
-mixscape&lt;- IntegratedMixscape(sg_dir = &quot;example/RNA/sg_lib_all.txt&quot;, mtx_dir = mtx_QC, NTC = &quot;NTC&quot;, prefix = &quot;./&quot;, label = &quot;&quot;)</code></pre>
-<br/>
-<center>
-<img src = "img/Mixscape.png" width = 300 height = 300>
-</center>
-<p><br/></p>
-<p><code>improved_scmageck_lr</code> is a function derived from <code>scmageck_lr</code> of <strong>scMAGeCK</strong> package. The input of <code>improved_scmageck_lr</code> is scaled matrix while the input of <code>scmageck_lr</code> is a normalized and scaled <code>SeuratObject</code>. The output of <code>improved_scmageck_lr</code> are transposed matrix of <code>scmageck_lr</code> output.</p>
-<pre class="r"><code>#Normalize and scale
-
-mtx_QC&lt;- normalize_scale(mtx_dir = mtx_QC)
-
-#Get scale.data matrix
-
-mtx_QC&lt;- GetAssayData(object = mtx_QC, slot = &quot;scale.data&quot;)
-
-#Running scMAGeCK_lr
-
-results&lt;- improved_scmageck_lr(BARCODE = &quot;example/RNA/sg_lib_all.txt&quot;, RDS = mtx_QC, NEGCTRL = &quot;NTC&quot;, SELECT_GENE = NULL, LABEL = &quot;improved&quot;, PERMUTATION = 10000, SAVEPATH = &quot;./&quot;, LAMBDA = 0.01)
-
-#Plot DE gene number
-
-DE_gene_plot(score_dir = results[[1]], pval_dir = results[[2]], project = &quot;RNA_example&quot;, prefix = &quot;./&quot;, label = &quot;&quot;, p_val_cut = 0.05, score_cut = 0.5, ylimit = &quot;auto&quot;)</code></pre>
-<br/>
-<center>
-<img src = "img/DE_gene_num.png" width = 300 height = 300>
-</center>
-<p><br/></p>
 <h3>
-<strong>Enhancer perturbation</strong>
+  <strong>10X config file</strong>
 </h3>
-<p>“Enhancer perturbation” means sgRNAs designed for potential enhancer region in the genome. We only support scRNA-seq as input but not scATAC-seq. Different from “gene perturbation” analysis, “enhancer perturbation” analysis has an additional step:</p>
-<ul>
-<li>
-<code>ciceroPlot</code> function in SCREEN is different from plot function in cicero. For perturb-RNA data, this function can only be applied to enhancer perturbations.Users can select one enhancer or one region to visualize the effect of the selected region on genes close to it.The effect is equal to scores calculated by <code>improved_scmageck_lr</code>.
-</li>
-</ul>
-<pre class="r"><code>#Draw cicero plot for enhancer perturbation in RNA-seq input
-
-ciceroPlot(score_dir = results[[1]], pval_dir = results[[2]], selected = &quot;chr1.112010456.112010479&quot;, species = &quot;Hs&quot;, version = &quot;v75&quot;, gene_annotations = NULL, p_val_cut = 0.05, score_cut = 0, upstream = 2000000, downstream = 2000000, track_size = c(1,.3,.2,.3), include_axis_track = TRUE)</code></pre>
-<br/>
-<center>
-<img src = "img/cicero.png" width = 300 height = 300>
-</center>
-<p><br/></p>
-<br/>
+<p>The latest version of cellranger can be used to align single-cell CRISPR screens RNA-seq data, which need a config file and a sgRNA reference file as input. More details of the config file can be found in <a href="https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/using/multi#cmoreference" target="_blank">Cellranger multi</a>. Here is the example of <a href="https://cf.10xgenomics.com/samples/cell-exp/6.0.0/SC3_v3_NextGem_DI_CRISPR_A549_5K_Multiplex/SC3_v3_NextGem_DI_CRISPR_A549_5K_Multiplex_config.csv" target="_blank">config file</a>: </p>
+<pre class="bash"><code>[gene-expression]
+reference,/path/to/references/refdata-gex-GRCh38-2020-A
+expect-cells,5000
+  
+[feature]
+reference,/path/to/feature_refs/SC3P_CellPlex_Set_A_millipore_pool_v2_jul_2020.csv
+  
+[libraries]
+fastq_id,fastqs,lanes,physical_library_id,feature_types,subsample_rate
+SC3_v3_NextGem_DI_CRISPR_A549_5K_gex,/path/to/fastqs/SC3_v3_NextGem_DI_CRISPR_A549_5K/SC3_v3_NextGem_DI_CRISPR_A549_5K_gex,any,CRISPR_A549_5K_gex,gene expression,
+SC3_v3_NextGem_DI_CRISPR_A549_5K_crispr,/path/to/fastqs/SC3_v3_NextGem_DI_CRISPR_A549_5K/SC3_v3_NextGem_DI_CRISPR_A549_5K_crispr,any,CRISPR_A549_5K_crispr,Crispr Guide Capture,
+</code></pre>
 <h3>
-<strong>Perturb-ATAC</strong>
+  <strong>10X sgRNA reference in csv format</strong>
 </h3>
-<p><br/></p>
-<pre class="r"><code>#Add meta data to SeuratObject
-
-peaks&lt;- ATAC_Add_meta_data(sg_dir = &quot;example/ATAC/sg_lib_all.txt&quot;, mtx_dir = &quot;example/ATAC/peaks.rds&quot;, fragments = &quot;example/ATAC/fragments.tsv.gz&quot;, replicate = 1)
-
-#Single-cell quality control
-
-peaks_QC&lt;- ATAC_scQC(mtx_dir = peaks, prefix = &quot;./&quot;, label = &quot;&quot;, peak_frac = 0.01, nFeature = c(200, 500000), nCount = 200, FRiP = 0.1, blank_NTC = FALSE)
-
-#Plot perturbation quality
-
-sgRNA_quality_plot(sg_dir = &quot;example/ATAC/sg_lib_all.txt&quot;, mtx_dir = peaks, prefix = &quot;./&quot;, LABEL = &quot;&quot;)
-
-#Calculate gene activity
-
-RNA&lt;- CalculateGeneActivity(mtx_dir = peaks, fragments = &quot;example/ATAC/fragments.tsv.gz&quot;, species = &quot;Hs&quot;, version = &quot;v75&quot;, gene_type = &quot;Symbol&quot;, protein_coding = TRUE, pro_up = 3000, pro_down = 0)</code></pre>
-<br/>
-<h4>
-<strong>Gene activity matrix analysis</strong>
-</h4>
-<p><br/></p>
-<pre class="r"><code>#Add meta data(perturbations, percent.mt and replicate information) to the SeuratObject
-
-RNA&lt;- Add_meta_data(sg_dir = &quot;example/ATAC/sg_lib_all.txt&quot;, mtx_dir = RNA, cal.mt = TRUE, species = &quot;Hs&quot;)
-
-#Single-cell quality control
-
-RNA_QC&lt;- scQC(mtx_dir = RNA, species = &quot;Hs&quot;, prefix = &quot;./&quot;, gene_frac = 0.01, nFeature_RNA = c(200, 5000), nCount_RNA = 1000, mt = 10, blank_NTC = FALSE)
-
-#Running Mixscape
-
-RNA_mixscape&lt;- IntegratedMixscape(sg_dir = &quot;example/ATAC/sg_lib_all.txt&quot;, mtx_dir = RNA_QC, NTC = &quot;NTC&quot;, replicate = 1, prefix = &quot;./&quot;)</code></pre>
-<pre class="r"><code>#Normalize and scale
-
-RNA_QC&lt;- normalize_scale(mtx_dir = RNA_QC, label = &quot;&quot;, prefix = &quot;./&quot;)
-
-#Get scale.data matrix
-
-RNA_QC&lt;- GetAssayData(object = RNA_QC, slot = &quot;scale.data&quot;)
-
-#Running scMAGeCK_lr
-
-RNA_results&lt;- improved_scmageck_lr(BARCODE = &quot;example/ATAC/sg_lib_all.txt&quot;, RDS = RNA_QC, NEGCTRL = &quot;NTC&quot;, SELECT_GENE = NULL, LABEL = &quot;improved&quot;, PERMUTATION = 10000, SAVEPATH = &quot;./&quot;, LAMBDA = 0.01)
-
-#Plot DE gene number
-
-DE_gene_plot(score_dir = RNA_results[1], pval_dir = RNA_results[2], project = &quot;RNA_example&quot;, prefix = &quot;./&quot;, label = &quot;&quot;, p_val_cut = 0.05, score_cut = 0.5, ylimit = c(-600, 600, 200))</code></pre>
-<br/>
-<h4>
-<strong>ATAC ciceroPlot</strong>
-</h4>
-<p><br/></p>
-<p>For perturb-ATAC data, this function will find differential peaks between selected TF and negative control first.Potential enhancers are selected from differential peaks list, without overlap with potential promoter regions.The effect of the potential enhancers on genes close to it is equal to scores of the selected TF calculated by <code>improved_scmageck_lr</code>. <br/> <br/></p>
-<pre class="r"><code>#Draw cicero plot for ATAC-seq input
-
-ATACciceroPlot(object = peaks_QC, score_dir = RNA_results[[1]], pval_dir = RNA_results[[2]], selected = &quot;MYC&quot;, species = &quot;Hs&quot;, version = &quot;v75&quot;, gene_annotations = NULL, pro_annotations = NULL, pro_up = 3000, pro_down = 0, overlap_cut = 0, p_val_cut = 0.05, score_cut = 0, p_adj_cut = 0.05, logFC_cut = 1, NTC = &quot;NTC&quot;, min.pct = 0.2, upstream = 2000000, downstream = 2000000, test.use = &quot;wilcox&quot;, track_size = c(1,.3,.2,.3), include_axis_track = TRUE)</code></pre>
-<br/>
-<center>
-<img src = "img/ATAC_cicero.png" width = 300 height = 900>
-</center>
-<p><br/></p>
-<br/>
+<p>sgRNA reference file is used to do sgRNA alignment. Besides sgRNA names and corresponding target genes, sgRNA reference need the sequence of sgRNA constant region, the sequence next to the spacer sequence in fastq file. Here is the example of <a href="https://cf.10xgenomics.com/samples/cell-exp/6.0.0/SC3_v3_NextGem_DI_CRISPR_A549_5K_Multiplex/SC3_v3_NextGem_DI_CRISPR_A549_5K_Multiplex_count_feature_reference.csv" target="_blank">sgRNA reference file</a>: </p>
+<pre class="bash"><code>id,name,read,pattern,sequence,feature_type,target_gene_id,target_gene_name
+Non-Targeting-5,Non-Targeting-5,R2,(BC)GTTTAAGAGCTAAGCTGGAA,ACTCGAAATCACCTATGGTA,CRISPR Guide Capture,Non-Targeting,Non-Targeting
+Non-Targeting-7,Non-Targeting-7,R2,(BC)GTTTAAGAGCTAAGCTGGAA,TTATGTGAGCACGCCATTAC,CRISPR Guide Capture,Non-Targeting,Non-Targeting
+Non-Targeting-8,Non-Targeting-8,R2,(BC)GTTTAAGAGCTAAGCTGGAA,CGACGGTAATGCACCTACTA,CRISPR Guide Capture,Non-Targeting,Non-Targeting
+APH1A-1,APH1A-1,R2,(BC)GTTTAAGAGCTAAGCTGGAA,GGCAACGCGACCCCACGAG,CRISPR Guide Capture,ENSG00000117362,APH1A
+APH1A-2,APH1A-2,R2,(BC)GTTTAAGAGCTAAGCTGGAA,ATGTCACCCCCAGACCCCG,CRISPR Guide Capture,ENSG00000117362,APH1A
+CDKN3-1,CDKN3-1,R2,(BC)GTTTAAGAGCTAAGCTGGAA,TGCAGCGCCGGCGACTCAC,CRISPR Guide Capture,ENSG00000100526,CDKN3
+CDKN3-2,CDKN3-2,R2,(BC)GTTTAAGAGCTAAGCTGGAA,CGGGGCACCGGTGAGTCGC,CRISPR Guide Capture,ENSG00000100526,CDKN3
+EZR-1,EZR-1,R2,(BC)GTTTAAGAGCTAAGCTGGAA,CACTCGGCGGACGCAAGGG,CRISPR Guide Capture,ENSG00000092820,EZR
+EZR-2,EZR-2,R2,(BC)GTTTAAGAGCTAAGCTGGAA,GCGCACTCGGCGGACGCAA,CRISPR Guide Capture,ENSG00000092820,EZR
+GRB2-1,GRB2-1,R2,(BC)GTTTAAGAGCTAAGCTGGAA,TGCTGCTTCGGCGACCGGG,CRISPR Guide Capture,ENSG00000177885,GRB2
+GRB2-2,GRB2-2,R2,(BC)GTTTAAGAGCTAAGCTGGAA,TTCTCGCGGGACACCGACG,CRISPR Guide Capture,ENSG00000177885,GRB2
+GSK3A-1,GSK3A-1,R2,(BC)GTTTAAGAGCTAAGCTGGAA,AGCCCAAGCCAGAGCGGCG,CRISPR Guide Capture,ENSG00000105723,GSK3A
+GSK3A-2,GSK3A-2,R2,(BC)GTTTAAGAGCTAAGCTGGAA,GAGCGGCGCGGCCTGGAAG,CRISPR Guide Capture,ENSG00000105723,GSK3A
+HRAS-1,HRAS-1,R2,(BC)GTTTAAGAGCTAAGCTGGAA,ACCCGAGCCGCACCCGCCG,CRISPR Guide Capture,ENSG00000174775,HRAS
+HRAS-2,HRAS-2,R2,(BC)GTTTAAGAGCTAAGCTGGAA,GCACGGGCGGCGGAGACTC,CRISPR Guide Capture,ENSG00000174775,HRAS
+JUN-1,JUN-1,R2,(BC)GTTTAAGAGCTAAGCTGGAA,AGCAGGGCTCTCCTCCCGG,CRISPR Guide Capture,ENSG00000177606,JUN
+JUN-2,JUN-2,R2,(BC)GTTTAAGAGCTAAGCTGGAA,TGTGGCTGAAGCAGCGAGG,CRISPR Guide Capture,ENSG00000177606,JUN
+</code></pre>
 <h3>
-<strong>Batch run</strong>
+  <strong>10X fastq filename</strong>
 </h3>
-<p>For SCREEN, users can only use one command in R to get all results.<code>SCREEN</code> function use count matrix and sgRNA library as input, and will save all the results generated by other functions above. <br/></p>
-<pre class="r"><code>SCREEN(sg_dir = &quot;example/RNA/sg_lib_all.txt&quot;, mtx_dir = &quot;example/RNA/perturb.rds&quot;, data_type = &quot;RNA&quot;, species = &quot;Hs&quot;, prefix = &quot;./&quot;, label = &quot;&quot;, gene_frac = 0.01, nFeature = c(200, 5000), nCount = 1000, mt = 10, FRiP = 0.1, blank_NTC = FALSE, lambda = 0.01, permutation = NULL, p_val_cut = 0.05, score_cut = 0.5, ylimit = c(-600, 600, 200), project = &quot;perturb&quot;, NTC = &quot;NTC&quot;, replicate = 1, select_gene = NULL)</code></pre>
-<p><br/>For ATAC-seq data, <code>data_type</code> should be changed, using <code>data_type = "ATAC"</code></p>
+<p>As SCREEN alignment part is based on cellranger, names of input fastq file must in the same format: </p>
+<pre class="bash"><code>
+</code></pre>
+
+<h3>
+  <strong>SCREEN analysis part</strong>
+</h3>
+<p>The second part of SCREEN is an integrated R package, using the output of SCREEN alignment part as input.</p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -903,80 +784,24 @@ footer is added to webpages before the MathJax javascript. -->
   });
 </script>
 
-
-</div>
-</div>
-
-</div>
-
 <script>
 
-// add bootstrap table styles to pandoc tables
-function bootstrapStylePandocTables() {
-  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
-}
-$(document).ready(function () {
-  bootstrapStylePandocTables();
-});
-
-
-</script>
-
-<!-- tabsets -->
-
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open');
+  // add bootstrap table styles to pandoc tables
+  function bootstrapStylePandocTables() {
+    $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+  }
+  $(document).ready(function () {
+    bootstrapStylePandocTables();
   });
-});
-</script>
+  
+  
+  </script>
 
-<!-- code folding -->
+</div>
+</div>
 
-<script>
-$(document).ready(function ()  {
+</div>
 
-    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
-    $('.unlisted.unnumbered').addClass('toc-ignore')
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
-
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
 
 </body>
 </html>
