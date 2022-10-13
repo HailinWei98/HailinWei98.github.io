@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>SCREE</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+</style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="SCREE.html">SCREE</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="alignment.html">Alignment</a>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+            scRNA-seq
+             
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu" role="menu">
+            <li>
+              <a href="RNA.html">Gene perturbation</a>
+            </li>
+            <li>
+              <a href="ORF.html">ORF perturbation</a>
+            </li>
+            <li>
+              <a href="enhancer.html">Enhancer perturbation</a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="ATAC.html">scATAC-seq</a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/HailinWei98/SCREE">
+    <span class="fa fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore"><strong>SCREE</strong></h1>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2021-09-23
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>SCREE/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20210907code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20210907)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20210907code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20210907)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomHailinWei98SCREEtreedc5b2b27c0e24a9420f74a8c2a2e30c847fa6076targetblankdc5b2b2a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/HailinWei98/SCREE/tree/dc5b2b27c0e24a9420f74a8c2a2e30c847fa6076" target="_blank">dc5b2b2</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomHailinWei98SCREEtreedc5b2b27c0e24a9420f74a8c2a2e30c847fa6076targetblankdc5b2b2a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/HailinWei98/SCREE/tree/dc5b2b27c0e24a9420f74a8c2a2e30c847fa6076" target="_blank">dc5b2b2</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+
+Untracked files:
+    Untracked:  data/workflow.png
+    Untracked:  img/
+    Untracked:  output/workflow.png
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/SCREE.Rmd</code>) and HTML (<code>docs/SCREE.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/HailinWei98/SCREE/2c16336e7907134ed6b44f5232dcff325586db1c/docs/SCREE.html" target="_blank">2c16336</a>
+</td>
+<td>
+HailinWei98
+</td>
+<td>
+2021-09-23
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/HailinWei98/SCREE/blob/a2a5b0a1202aa108ab0750208f45cd85d8665385/analysis/SCREE.Rmd" target="_blank">a2a5b0a</a>
+</td>
+<td>
+HailinWei98
+</td>
+<td>
+2021-09-23
+</td>
+<td>
+Publish the initial files for myproject
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/HailinWei98/SCREE/eeeebf3a496f7b67059be35871ae092db0f6d933/docs/SCREE.html" target="_blank">eeeebf3</a>
+</td>
+<td>
+HailinWei98
+</td>
+<td>
+2021-09-23
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/HailinWei98/SCREE/blob/94450d15ee4aa807a06ebcf1cb2096ca2b7f2b84/analysis/SCREE.Rmd" target="_blank">94450d1</a>
+</td>
+<td>
+HailinWei98
+</td>
+<td>
+2021-09-23
+</td>
+<td>
+Publish the initial files for myproject
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/HailinWei98/SCREE/94450d15ee4aa807a06ebcf1cb2096ca2b7f2b84/docs/SCREE.html" target="_blank">94450d1</a>
+</td>
+<td>
+HailinWei98
+</td>
+<td>
+2021-09-23
+</td>
+<td>
+Publish the initial files for myproject
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/HailinWei98/SCREE/518a5cacf3a46144afd24003ecf6a3a12ab7f80d/docs/SCREE.html" target="_blank">518a5ca</a>
+</td>
+<td>
+HailinWei98
+</td>
+<td>
+2021-09-22
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/HailinWei98/SCREE/blob/ab04ccf84f185bba13ce6d101eeae6c1ab1b290a/analysis/SCREE.Rmd" target="_blank">ab04ccf</a>
+</td>
+<td>
+HailinWei98
+</td>
+<td>
+2021-09-22
+</td>
+<td>
+Publish the initial files for myproject
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/HailinWei98/SCREE/855bd746a9419db56fd3d582b93134175f892b38/docs/SCREE.html" target="_blank">855bd74</a>
+</td>
+<td>
+HailinWei98
+</td>
+<td>
+2021-09-22
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/HailinWei98/SCREE/blob/e582e5c4c363a978a4946ec77996a51d0ffa4b80/analysis/SCREE.Rmd" target="_blank">e582e5c</a>
+</td>
+<td>
+HailinWei98
+</td>
+<td>
+2021-09-22
+</td>
+<td>
+Publish the initial files for myproject
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<p>
+<strong>SCREE</strong>(<strong>S</strong>ingle-cell <strong>C</strong>RISPR sc<strong>RE</strong>en data analyses and p<strong>E</strong>rturbation modeli<strong>N</strong>g) is a comprehensive pipeline to visualize data quality and model perturbation effect of single-cell CRISPR screens RNA-seq/ATAC-seq datasets. SCREE has integrated three R functions: scMAGeCK_lr, Mixscape and plot function of cicero. These functions are used to model the regulatory score between perturbations and genes, estimate the perturbation efficiency of each perturbation and visualize enhancer potential targets, respectively.
+</p>
+<h2>
+<strong>Schema</strong>
+</h2>
+<center>
+<img src = "img/workflow.png" width="500" height="400"></img>
+</center>
+<h2>
+<strong>Usage</strong>
+</h2>
+<p><br/>SCREE provide two major functions, <strong>preprocess</strong> and <strong>analysis</strong>. To get a full list of subcommands and descriptions: <br/></p>
+<pre class="bash"><code>usage: SCREE [-h] [-v] {preprocess,analysis} ...
+</code></pre>
+<table>
+  <colgroup>
+  <col width="52%" />
+  <col width="47%" />
+  </colgroup>
+  <thead>
+  <tr class="header">
+  <th>Subcommands</th>
+  <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr class="odd">
+  <td><code>preprocess</code></td>
+  <td>Reads alignment and quantification.</td>
+  </tr>
+  <tr class="even">
+  <td><code>analysis</code></td>
+  <td>Performing all downstream analyses with one command.</td>
+  </tr>
+  </tbody>
+</table>
+<p><h3><strong>Preprocess</strong></h3><br/> The usage of the preprocess function: <br/></p>
+<pre class="bash"><code>usage: SCREE preprocess [-h] [--datatype {RNA,ATAC}]
+  [--filetype {multi,single}] [--reference REFERENCE]
+  [--config CONFIG] [--mkref] [--input INPUT]
+  [--sample SAMPLE] [--output OUTPUT] [-m MEMORY]
+  [-c CORES] [--csv CSV] [--bin] [--binsize BINSIZE]
+  [-n PROCESS_N] [-l CHRLENGTH] [--para PARA]
+</code></pre>
+<table>
+  <colgroup>
+  <col width="52%" />
+  <col width="47%" />
+  </colgroup>
+  <thead>
+  <tr class="header">
+  <th>Options</th>
+  <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr class="odd">
+  <td><code>--help/-h</code></td>
+  <td>Show this help message and exit.</td>
+  </tr>
+  <tr class="even">
+  <td><code>--filetype</code></td>
+  <td>Input file type, one of 'multi', 'single'. 'multi' indicates sgRNA sequence and mRNA/DNA sequence are not in the same files, 'single' indicates sgRNA sequence and mRNA sequence are in the same files. Notably, for scATAC-seq input, SCREE only support 'multi'.</td>
+  </tr>
+  <tr class="odd">
+  <td><code>--reference</code></td>
+  <td>Reference path.</td>
+  </tr>
+  <tr class="even">
+  <td><code>--config</code></td>
+  <td>Config file to generate reference index.</td>
+  </tr>
+  <tr class="odd">
+  <td><code>--mkref</code></td>
+  <td>Generate reference index or not.</td>
+  </tr>
+  <tr class="even">
+  <td><code>--input</code></td>
+  <td>File path of all the fastq files.</td>
+  </tr>
+  <tr class="odd">
+  <td><code>--sample</code></td>
+  <td>Sample prefix.</td>
+  </tr>
+  <tr class="even">
+  <td><code>--output</code></td>
+  <td>Output folder to create.</td>
+  </tr>
+  <tr class="odd">
+  <td><code>-m</code></td>
+  <td>Maximum local memory to use. Unit: GiB. </td>
+  </tr>
+  <tr class="even">
+  <td><code>-c</code></td>
+  <td>Maximum local cores to use. </td>
+  </tr>
+  <tr class="odd">
+  <td><code>--csv</code></td>
+  <td>Config file to process 'multi' file type. </td>
+  </tr>
+  <tr class="even">
+  <td><code>--bin</code></td>
+  <td>Generate a bin-based matrix instead of a peak-based matrix. </td>
+  </tr>
+  <tr class="odd">
+  <td><code>--binsize</code></td>
+  <td>Size of the genome bins to use. Only available with the parameter '--bin'. Default is 5000. </td>
+  </tr>
+  <tr class="even">
+  <td><code>-n, --process_n</code></td>
+  <td>Number of regions to load into memory at a time, per thread. Processing more regions at once can be faster but uses more memory. Only available with the parameter '--bin'. Default is 2000. </td>
+  </tr>
+  <tr class="odd">
+  <td><code>-l, --chrLength</code></td>
+  <td>Path to the file which stores the chromosome length of the reference genome, always named as 'chrNameLength.txt'. Only available with the parameter '--bin'. </td>
+  </tr>
+  <tr class="even">
+  <td><code>--para</code></td>
+  <td>Other parameters passed into cellranger or cellranger-atac, should be in string format like '--parameter1 value1 --parameter2 value2'. </td>
+  </tr>
+  </tbody>
+</table>
+<p><h3><strong>Analysis</strong></h3><br/> The usage of the analysis function: <br/></p>
+<pre class="bash"><code>usage: SCREE analysis [-h] [--type {RNA,ATAC,enhancer}]
+  [--replicate REPLICATE] [--mtx MTX] [--sg_lib SG_LIB]
+  [--sg_format {10X,dataframe,matrix,table}]
+  [--freq_cut FREQ_CUT] [--freq_percent FREQ_PERCENT]
+  [--unique] [--project PROJECT] [--species {Hs,Mm}]
+  [--fragments FRAGMENTS] [--prefix PREFIX]
+  [--label LABEL] [--feature_frac FEATURE_FRAC]
+  [--nFeature NFEATURE] [--nCount NCOUNT]
+  [--percent.mt PERCENT.MT] [--blank] [--NTC NTC]
+  [--sg.split SG.SPLIT] [--raster]
+  [--ref_version {v75,v86,v79}]
+  [--gene_type {Symbol,Ensembl}] [--pval_cut PVAL_CUT]
+  [--score_cut SCORE_CUT] [--article ARTICLE]
+  [--article_name ARTICLE_NAME] [--data DATA]
+  [--data_name DATA_NAME] [--padj_cut PADJ_CUT]
+  [--logFC_cut LOGFC_CUT]
+</code></pre>
+<table>
+  <colgroup>
+  <col width="52%" />
+  <col width="47%" />
+  </colgroup>
+  <thead>
+  <tr class="header">
+  <th>Options</th>
+  <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr class="odd">
+  <td><code>--help/-h</code></td>
+  <td>Show this help message and exit.</td>
+  </tr>
+  <tr class="even">
+  <td><code>--type</code></td>
+  <td>Data type, one of 'RNA', 'ATAC', 'enhancer'. Default is 'RNA'.</td>
+  </tr>
+  <tr class="odd">
+  <td><code>--replicate</code></td>
+  <td>Directory to a txt file only contains the replicate information of each cell, in the same order of cells in the input matrix. If no replicate information, we will consider that all cells are from the same replicate, and this parameter will be set as 1. Default is 1. </td>
+  </tr>
+  <tr class="even">
+  <td><code>--mtx</code></td>
+  <td>Directory to an rds file of the SeuratObject, with cell in columns and features in rows, or the directory to the folder of 10X-like outputs.</td>
+  </tr>
+  <tr class="odd">
+  <td><code>--sg_lib</code></td>
+  <td>Directory to a txt file of the sgRNA information. This parameter can be ommited when the 'sg_format' is '10X'.</td>
+  </tr>
+  <tr class="even">
+  <td><code>--sg_format</code></td>
+  <td>Format of the input sg_lib, one of '10X', 'dataframe', 'matrix', 'table'. '10X' means the sgRNA information is an sgRNA count matrix stored in the 10X-like outputs; 'dataframe' means a table with 3 columns: cell(cell barcode), barcode(sgRNA name), freqUMI counts in each cell for each sgRNA; 'matrix' means a sgRNA count matrix with cells in columns and sgRNAs in rows; 'table' means a table with 3 columns: cell(cell barcode), barcode(sgRNA name), gene(sgRNA targeted gene). Default is '10X'.</td>
+  </tr>
+  <tr class="odd">
+  <td><code>--freq_cut</code></td>
+  <td>Cutoff of sgRNA count numbers. For each cell, only sgRNA with counts more than freq_cut will be retained. Default is 20. </td>
+  </tr>
+  <tr class="even">
+  <td><code>--freq_percent</code></td>
+  <td>Cutoff of sgRNA frequency. For each cell, only sgRNA with frequency more than freq_percent will be retained. Default is 0.8. </td>
+  </tr>
+  <tr class="odd">
+  <td><code>--unique</code></td>
+  <td>Only retain cells with the top target that passed the freq_percent, which means each cell will be assigned with a unique sgRNA. </td>
+  </tr>
+  <tr class="even">
+  <td><code>--project</code></td>
+  <td>Project name. Default is 'perturb'. </td>
+  </tr>
+  <tr class="odd">
+  <td><code>--species</code></td>
+  <td>Species source of input data, one of 'Hs', 'Mm'. Defaule is 'Hs'.  </td>
+  </tr>
+  <tr class="even">
+  <td><code>--fragments</code></td>
+  <td>Directory to the fragments file. Only required for scATAC-seq based input. </td>
+  </tr>
+  <tr class="odd">
+  <td><code>--prefix</code></td>
+  <td>Path to the results generated by SCREE. Default is current directory. </td>
+  </tr>
+  <tr class="even">
+  <td><code>--label</code></td>
+  <td>The prefix label of previous output file. Notably, there needs a separator between default file names and the label, so label would be better to be like 'label_'. Default is ''. </td>
+  </tr>
+  <tr class="odd">
+  <td><code>--feature_frac</code></td>
+  <td>A paramter for filtering low expressed genes or low accessible peaks. By default, only genes/peaks that have counts in at least that fractions of cells are kept. Default is 0.01. </td>
+  </tr>
+  <tr class="even">
+  <td><code>--nFeature</code></td>
+  <td>Minimal count numbers in each cell. Default is 200. </td>
+  </tr>
+  <tr class="odd">
+  <td><code>--nCount</code></td>
+  <td>Minimal detected feature numbers in each cell. Default is 1000.  </td>
+  </tr>
+  <tr class="even">
+  <td><code>--percent.mt</code></td>
+  <td>Maximum mitochondrial gene percentage of each cell. This parameter can also be used for scATAC-seq based data to represent the minimum fraction of reads in peaks(FRiP). Default is 10(means 10%%). </td>
+  </tr>
+  <tr class="odd">
+  <td><code>--blank</code></td>
+  <td>Use blank control as negative control. With this parameter, cells assigned with no sgRNA will be removed. </td>
+  </tr>
+  <tr class="even">
+  <td><code>--NTC</code></td>
+  <td>The name of negative controls. Default is 'NTC'.</td>
+  </tr>
+  <tr class="odd">
+  <td><code>--sg.split</code></td>
+  <td>String to split sgRNA name. Default is '_sgRNA', which means sgRNA named in the format like 'gene_sgRNA1'. </td>
+  </tr>
+  <tr class="even">
+  <td><code>--raster</code></td>
+  <td>Convert points to raster format, will be useful to reduce the storage cost of the output figure or pdf. </td>
+  </tr>
+  <tr class="odd">
+  <td><code>--ref_version</code></td>
+  <td>Version of the reference genome(Ensembl), one of 'v75'(hg19/mm9), 'v79'(hg38/mm10), 'v86'(hg38). Default is 'v75'. </td>
+  </tr>
+  <tr class="even">
+  <td><code>--gene_type</code></td>
+  <td>Type of gene names, can be one of 'Symbol', 'Ensembl'. Default is 'Symbol'. </td>
+  </tr>
+  <tr class="odd">
+  <td><code>--pval_cut</code></td>
+  <td>P-value cutoff of improved_scmageck_lr results. Default is 0.05. </td>
+  </tr>
+  <tr class="even">
+  <td><code>--score_cut</code></td>
+  <td>Score cutoff of improved_scmageck_lr results. Default is 0.2. </td>
+  </tr>
+  <tr class="odd">
+  <td><code>--article</code></td>
+  <td>The link to the article of the dataset. </td>
+  </tr>
+  <tr class="even">
+  <td><code>--article_name</code></td>
+  <td>Name of the article. </td>
+  </tr>
+  <tr class="odd">
+  <td><code>--data</code></td>
+  <td>Link to the data source. </td>
+  </tr>
+  <tr class="even">
+  <td><code>--data_name</code></td>
+  <td>Name of the data, usually the GSE accession number. </td>
+  </tr>
+  <tr class="odd">
+  <td><code>--padj_cut</code></td>
+  <td>Maximum adjust p_value. Default is 0.05. </td>
+  </tr>
+  <tr class="even">
+  <td><code>--logFC_cut</code></td>
+  <td>Limit testing to genes which show, on average, at least X-fold difference (log-scale) between the two groups of cells. Default is 0.25. </td>
+  </tr>
+  </tbody>
+</table>
+<h3>
+  <strong>10X config file</strong>
+</h3>
+<p>The latest version of cellranger can be used to align single-cell CRISPR screens RNA-seq data, which need a config file and a sgRNA reference file as input. More details of the config file can be found in <a href="https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/using/multi#cmoreference" target="_blank">Cellranger multi</a>. Here is the example of <a href="https://cf.10xgenomics.com/samples/cell-exp/6.0.0/SC3_v3_NextGem_DI_CRISPR_A549_5K_Multiplex/SC3_v3_NextGem_DI_CRISPR_A549_5K_Multiplex_config.csv" target="_blank">config file</a>: </p>
+<pre class="bash"><code>[gene-expression]
+reference,/path/to/references/refdata-gex-GRCh38-2020-A
+expect-cells,5000
+  
+[feature]
+reference,/path/to/feature_refs/SC3P_CellPlex_Set_A_millipore_pool_v2_jul_2020.csv
+  
+[libraries]
+fastq_id,fastqs,lanes,physical_library_id,feature_types,subsample_rate
+SC3_v3_NextGem_DI_CRISPR_A549_5K_gex,/path/to/fastqs/SC3_v3_NextGem_DI_CRISPR_A549_5K/SC3_v3_NextGem_DI_CRISPR_A549_5K_gex,any,CRISPR_A549_5K_gex,gene expression,
+SC3_v3_NextGem_DI_CRISPR_A549_5K_crispr,/path/to/fastqs/SC3_v3_NextGem_DI_CRISPR_A549_5K/SC3_v3_NextGem_DI_CRISPR_A549_5K_crispr,any,CRISPR_A549_5K_crispr,Crispr Guide Capture,
+</code></pre>
+<h3>
+  <strong>10X sgRNA reference in csv format</strong>
+</h3>
+<p>sgRNA reference file is used to do sgRNA alignment. Besides sgRNA names and corresponding target genes, sgRNA reference need the sequence of sgRNA constant region, the sequence next to the spacer sequence in fastq file. Here is the example of <a href="https://cf.10xgenomics.com/samples/cell-exp/6.0.0/SC3_v3_NextGem_DI_CRISPR_A549_5K_Multiplex/SC3_v3_NextGem_DI_CRISPR_A549_5K_Multiplex_count_feature_reference.csv" target="_blank">sgRNA reference file</a>: </p>
+<pre class="bash"><code>id,name,read,pattern,sequence,feature_type,target_gene_id,target_gene_name
+Non-Targeting-5,Non-Targeting-5,R2,(BC)GTTTAAGAGCTAAGCTGGAA,ACTCGAAATCACCTATGGTA,CRISPR Guide Capture,Non-Targeting,Non-Targeting
+Non-Targeting-7,Non-Targeting-7,R2,(BC)GTTTAAGAGCTAAGCTGGAA,TTATGTGAGCACGCCATTAC,CRISPR Guide Capture,Non-Targeting,Non-Targeting
+Non-Targeting-8,Non-Targeting-8,R2,(BC)GTTTAAGAGCTAAGCTGGAA,CGACGGTAATGCACCTACTA,CRISPR Guide Capture,Non-Targeting,Non-Targeting
+APH1A-1,APH1A-1,R2,(BC)GTTTAAGAGCTAAGCTGGAA,GGCAACGCGACCCCACGAG,CRISPR Guide Capture,ENSG00000117362,APH1A
+APH1A-2,APH1A-2,R2,(BC)GTTTAAGAGCTAAGCTGGAA,ATGTCACCCCCAGACCCCG,CRISPR Guide Capture,ENSG00000117362,APH1A
+CDKN3-1,CDKN3-1,R2,(BC)GTTTAAGAGCTAAGCTGGAA,TGCAGCGCCGGCGACTCAC,CRISPR Guide Capture,ENSG00000100526,CDKN3
+CDKN3-2,CDKN3-2,R2,(BC)GTTTAAGAGCTAAGCTGGAA,CGGGGCACCGGTGAGTCGC,CRISPR Guide Capture,ENSG00000100526,CDKN3
+EZR-1,EZR-1,R2,(BC)GTTTAAGAGCTAAGCTGGAA,CACTCGGCGGACGCAAGGG,CRISPR Guide Capture,ENSG00000092820,EZR
+EZR-2,EZR-2,R2,(BC)GTTTAAGAGCTAAGCTGGAA,GCGCACTCGGCGGACGCAA,CRISPR Guide Capture,ENSG00000092820,EZR
+GRB2-1,GRB2-1,R2,(BC)GTTTAAGAGCTAAGCTGGAA,TGCTGCTTCGGCGACCGGG,CRISPR Guide Capture,ENSG00000177885,GRB2
+GRB2-2,GRB2-2,R2,(BC)GTTTAAGAGCTAAGCTGGAA,TTCTCGCGGGACACCGACG,CRISPR Guide Capture,ENSG00000177885,GRB2
+GSK3A-1,GSK3A-1,R2,(BC)GTTTAAGAGCTAAGCTGGAA,AGCCCAAGCCAGAGCGGCG,CRISPR Guide Capture,ENSG00000105723,GSK3A
+GSK3A-2,GSK3A-2,R2,(BC)GTTTAAGAGCTAAGCTGGAA,GAGCGGCGCGGCCTGGAAG,CRISPR Guide Capture,ENSG00000105723,GSK3A
+HRAS-1,HRAS-1,R2,(BC)GTTTAAGAGCTAAGCTGGAA,ACCCGAGCCGCACCCGCCG,CRISPR Guide Capture,ENSG00000174775,HRAS
+HRAS-2,HRAS-2,R2,(BC)GTTTAAGAGCTAAGCTGGAA,GCACGGGCGGCGGAGACTC,CRISPR Guide Capture,ENSG00000174775,HRAS
+JUN-1,JUN-1,R2,(BC)GTTTAAGAGCTAAGCTGGAA,AGCAGGGCTCTCCTCCCGG,CRISPR Guide Capture,ENSG00000177606,JUN
+JUN-2,JUN-2,R2,(BC)GTTTAAGAGCTAAGCTGGAA,TGTGGCTGAAGCAGCGAGG,CRISPR Guide Capture,ENSG00000177606,JUN
+</code></pre>
+<h3>
+  <strong>10X fastq filename</strong>
+</h3>
+<p>As SCREE alignment part is based on cellranger, names of input fastq file must in the same format: </p>
+<pre class="bash"><code>SC3_v3_NextGem_DI_CRISPR_A549_5K_gex_S5_L001_I1_001.fastq.gz
+</code></pre>
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.0.2 (2020-06-22)
+Platform: x86_64-apple-darwin17.0 (64-bit)
+Running under: macOS Catalina 10.15.7
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRblas.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRlapack.dylib
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] workflowr_1.6.2
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_1.0.7        whisker_0.4       knitr_1.33        magrittr_2.0.1   
+ [5] R6_2.5.0          rlang_0.4.11      fansi_0.5.0       stringr_1.4.0    
+ [9] tools_4.0.2       xfun_0.25         utf8_1.2.2        git2r_0.28.0     
+[13] jquerylib_0.1.4   htmltools_0.5.1.1 ellipsis_0.3.2    rprojroot_2.0.2  
+[17] yaml_2.2.1        digest_0.6.27     tibble_3.1.3      lifecycle_1.0.0  
+[21] crayon_1.4.1      later_1.2.0       sass_0.4.0        vctrs_0.3.8      
+[25] promises_1.2.0.1  fs_1.5.0          glue_1.4.2        evaluate_0.14    
+[29] rmarkdown_2.10    stringi_1.7.3     bslib_0.2.5.1     compiler_4.0.2   
+[33] pillar_1.6.2      jsonlite_1.7.2    httpuv_1.6.1      pkgconfig_2.0.3  </code></pre>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+<script>
+
+  // add bootstrap table styles to pandoc tables
+  function bootstrapStylePandocTables() {
+    $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+  }
+  $(document).ready(function () {
+    bootstrapStylePandocTables();
+  });
+  
+  
+  </script>
+
+</div>
+</div>
+
+</div>
+
+
+</body>
+</html>
