@@ -280,7 +280,7 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore"><strong>SCREE</strong></h1>
+<h1 class="title toc-ignore"><strong>Benchmark</strong></h1>
 
 </div>
 
@@ -616,43 +616,294 @@ Publish the initial files for myproject
 </div>
 </div>
 </div>
+<p>
+In this page, we provide the code for testing GSFA(v0.2.8) and SCEPTRE(V0.1.0). To estimate the time usage, we record the time before and after running the major model. To record the memory usage, we create a python script as follows and include the R code for running into the robjects.r.
+</p>
+<pre class="python"><code>from memory_profiler import profile
+import rpy2.robjects as robjects
+import os
+    
+@profile
+def run():
+    robjects.r('''{R code}''')
+
+if __name__ == '__main__':
+        run() 
+</code></pre>
 <h2>
-  <strong>scRNA-seq</strong>
-</h2>
-<h3>
-  <strong>Run with config.csv and reference.csv</strong>
-</h3>
-<p>If users provide config.csv which include input and reference information and sgRNA reference.csv, SCREE alignment command can be as follows: </p>
-<pre class="bash"><code>SCREE preprocess --datatype RNA --csv config.csv -c 8 -m 50 --output cellranger-RNA --para "--description test"
-</code></pre>
-<h3>
-  <strong>Run without config.csv and reference.csv</strong>
-</h3>
-<p>If users don't provide config.csv and sgRNA reference.csv, SCREE alignment command can be as follows, for both mRNA and sgRNA files: </p>
-<pre class="bash"><code>SCREE preprocess --datatype RNA --reference refdata-gex-GRCh38-2020-A --input /folder/of/the/fastq/ --sample /sample/name/of/the/fastq/ -c 8 -m 50 --output cellranger-RNA --para "--description test"
+<strong>GSFA Testing</strong>
+</h2><br/>
+<p>For GSFA testing, we find that its iteration step stop after finishing 800 iteration when we using a dataset of ~30K cells, 1.2K genes and 249 perturbed genes as input. </p>
+<pre class="r"><code>library(Seurat)
+library(GSFA)
+
+#data preparation
+
+mtx <- readRDS("perturb-CITE/control/RNA_QC.rds")
+sg_lib <- read.table("perturb-CITE/control/sg_lib_all.txt", header = T)
+sg_lib <- subset(sg_lib, cell %in% colnames(mtx))
+scale.data <- GetAssayData(object = mtx, slot = "scale.data")
+
+#define the function to convert the data frame to index matrix, derived from scmageck
+
+frame2indmatrix <- function(bc_d, targetobj) {
+    rnm = colnames(targetobj)
+    cnm = unique(bc_d$gene)
+    scalef = targetobj
+    message(paste(length(unique(bc_d$cell)), "..."))
+    message(paste(ncol(scalef), "..."))
+    #rnm = rnm[!is.na(rnm)] #remove NA
+    #rnm = rnm[rnm %in% colnames(scalef)]
+    if (length(rnm) == 0) {
+        stop("Cell names do not match in expression matrix and barcode.")
+    }
+    cnm = cnm[!is.na(cnm)]#remove NA
+    ind_matrix = matrix(rep(0, length(rnm) * length(cnm)), nrow = length(rnm))
+    rownames(ind_matrix) = rnm
+    colnames(ind_matrix) = cnm
+    row <- bc_d[, 'cell']
+    col <- bc_d[, 'gene']
+    test <- (row %in% rnm) & (col %in% cnm)
+    idx <- as.matrix(data.frame(row[test], col[test]))
+    ind_matrix[idx] <- 1
+    return(ind_matrix)
+}
+
+G_mat <- frame2indmatrix(sg_lib, scale.data)
+
+scale.data <- t(scale.data)
+rm(list = c("mtx", "sg_lib"))
+
+
+index <- which(colnames(G_mat) == "NTC")
+
+#running GSFA
+
+st<- Sys.time()
+set.seed(50000)
+fit0 <- fit_gsfa_multivar(Y = scale.data, G = G_mat, K = 20,
+                          use_neg_control = TRUE,
+                          neg_control_index = index,
+                          prior_type = "mixture_normal", 
+                          init.method = "svd",
+                          niter = 1000, used_niter = 500,
+                          verbose = T, return_samples = T)
+
+set.seed(50000)
+fit0 <- fit_gsfa_multivar(Y = scale.data, G = G_mat,
+                          use_neg_control = TRUE,
+                          neg_control_index = index,
+                          prior_type = "mixture_normal", fit0 = fit0,
+                          init.method = "svd",
+                          niter = 1000, used_niter = 500,
+                          verbose = T, return_samples = T)
+et<- Sys.time()
+print(et - st)
 </code></pre>
 
 <h2>
-  <strong>scATAC-seq</strong>
-</h2>
-<p>For scATAC-seq input, SCREE alignment command can be as follows: </p>
-<pre class="bash"><code># DNA alignment, generate both bin-based and peak-based matrix
+    <strong>SCEPTRE Testing</strong>
+    </h2><br/>
+    <p>For SCEPTRE testing, we execute the code with the parameter 'parallel = TRUE' to minimize the running time. However, we find that it will raise the warning message as follows when we test a dataset of ~15K cells, 1.2K genes and 4 perturbed genes. </p>
+<pre class = "bash"><code>In mclapply(argsList, FUN, mc.preschedule = preschedule, mc.set.seed = set.seed,  : scheduled cores 80, 87, 97, 99, 103, 107, 108, 109, 111, 120, 126, 129, 132, 151, 154, 159, 176 did not deliver results, all values of the jobs will be affected.</code></pre>
+<p>Due to this message, we don't test SCEPTRE with datasets including more cells. Additionally, while we execute the code with the parameter 'parallel = FALSE' recently, we find that the dataset used before can be analyzed by SCEPTRE without any warning message. We also test the new function in SCEPTRE v0.2.0 and find that the function can analyze datasets including more than 75K cells with less memory usage and more time usage, compared to the function in SCREE. We show the code for testing SCEPTRE v0.1.0 below.</p>
+<p>To make sure the dimension of datasets for all methods is the same, we remove the build-in quality control step in the SCEPTRE function. The new functions are as follows.</p>
+<pre class = "r"><code>run_sceptre_high_moi2 <- function(gene_matrix, combined_perturbation_matrix, covariate_matrix, gene_gRNA_group_pairs, side = "both", storage_dir = tempdir(), regularization_amount = 0.1, B = 1000, full_output = FALSE, parallel = TRUE, seed = 4) {
+    ##################
+    # DEFINE CONSTANTS
+    ##################
+    cat(paste0("Check ", storage_dir, "/logs for more detailed status updates.\n"))
+  
+    #############################
+    # BASIC PROCESSING AND CHECKS
+    #############################
+    cat("Running checks and setting up directory structure. ")
+  
+    # 0. Set up parallel, fst, offsite directory structure, pod sizes
+    dirs <- initialize_directories(storage_location = storage_dir)
+    if (parallel) {
+      n_cores <- parallel::detectCores()
+      doParallel::registerDoParallel(cores = n_cores)
+      foreach_funct <- foreach::`%dopar%`
+    } else {
+      n_cores <- 1L
+      foreach_funct <- foreach::`%do%`
+    }
+    # 1. threshold gRNA_matrix (using threshold = 3, for now) if necessary
+    gRNA_matrix <- combined_perturbation_matrix
+  
+    # 2. Ensure that cell barcodes coincide across gene and perturbation matrices
+    if  (!identical(colnames(gRNA_matrix), colnames(gene_matrix)) || !identical(row.names(covariate_matrix), colnames(gene_matrix))) {
+      stop("The column names of `gene_matrix` and `gRNA_matrix` and the row names of `covariate matrix` should be the cell barcodes. Ensure that the cell barcodes are present and identical across these matrices/data frames.")
+    }
+    if (is.null(row.names(gRNA_matrix)) || is.null(row.names(gene_matrix))) {
+      stop("The row names of `gene_matrix` and `gRNA_matrix` should contain the gene IDs and gRNA IDs, respectively.")
+    }
+  
+    # 4. Make sure genes/gRNAs in the data frame are actually a part of the expression matrices; ensure all rows distinct
+    if ("gRNA_group" %in% colnames(gene_gRNA_group_pairs)) {
+      gene_gRNA_group_pairs <- dplyr::rename(gene_gRNA_group_pairs, gRNA_id = gRNA_group)
+    }
+    if (!all(c("gene_id", "gRNA_id") %in% colnames(gene_gRNA_group_pairs))) stop("The columns `gene_id` and `gRNA_id` must be present in the `gene_gRNA_group_pairs` data frame.")
+    abs_genes <- gene_gRNA_group_pairs$gene_id[!(gene_gRNA_group_pairs$gene_id %in% row.names(gene_matrix))]
+    abs_gRNAs <- gene_gRNA_group_pairs$gRNA_id[!(gene_gRNA_group_pairs$gRNA_id %in% row.names(gRNA_matrix))]
+    if (length(abs_genes) >= 1) {
+      msg <- paste0("The genes `", paste0(abs_genes, collapse = ", "), "' are present in the `gene_gRNA_group_pairs` data frame but not in the `gene_matrix` matrix. Either remove these genes from `gene_gRNA_group_pairs,` or add these genes to `gene_matrix`.")
+      stop(msg)
+    }
+    if (length(abs_gRNAs) >= 1) {
+      msg <- paste0("The perturbations `", paste0(abs_gRNAs, collapse = ", "), "' are present in the `gene_gRNA_group_pairs` data frame but not in the `gRNA_matrix` matrix. Either remove these perturbations from `gene_gRNA_group_pairs,` or add these perturbations to `gRNA_matrix`.")
+      stop(msg)
+    }
+    gene_gRNA_group_pairs <- gene_gRNA_group_pairs %>% dplyr::distinct()
+    # 5. Set the pods
+    n_genes <- length(unique(gene_gRNA_group_pairs$gene_id))
+    n_gRNAs <- length(unique(gene_gRNA_group_pairs$gRNA_id))
+    n_pairs <- nrow(gene_gRNA_group_pairs)
+    pod_sizes <- c(gene = ceiling(n_genes/(2 * n_cores)),
+                   gRNA = ceiling(n_gRNAs/(2 * n_cores)),
+                   pair = ceiling(n_pairs/(2 * n_cores)))
+    cat(crayon::green(' \u2713\n'))
+    # 6. If number of genes is small, set regularization_amount to 0
+    if (n_genes < 50) regularization_amount <- 0
+  
+    ##############
+    # METHOD START
+    ##############
+    # create file dictionaries
+    dicts <- suppressMessages(create_and_store_dictionaries(gene_gRNA_group_pairs,
+                                           dirs[["gene_precomp_dir"]],
+                                           dirs[["gRNA_precomp_dir"]],
+                                           dirs[["results_dir"]],
+                                           pod_sizes))
+    cat("Running gene precomputations. ")
+    # run first round of gene precomputations
+    foreach_funct(foreach::foreach(pod_id = seq(1, dicts[["gene"]])),
+                  run_gene_precomputation_at_scale_round_1(pod_id = pod_id,
+                                                           gene_precomp_dir = dirs[["gene_precomp_dir"]],
+                                                           gene_matrix = gene_matrix,
+                                                           covariate_matrix = covariate_matrix,
+                                                           regularization_amount = regularization_amount,
+                                                           log_dir = dirs[["log_dir"]]))
+    cat(crayon::green(' \u2713\n'))
+  
+    # regularize thetas
+    regularize_gene_sizes_at_scale(gene_precomp_dir = dirs[["gene_precomp_dir"]],
+                                   regularization_amount = regularization_amount,
+                                   log_dir = dirs[["log_dir"]])
+  
+    # run second round of gene precomputations
+    foreach_funct(foreach::foreach(pod_id = seq(1, dicts[["gene"]])),
+                  run_gene_precomputation_at_scale_round_2(pod_id = pod_id,
+                                                           gene_precomp_dir = dirs[["gene_precomp_dir"]],
+                                                           gene_matrix = gene_matrix,
+                                                           covariate_matrix = covariate_matrix,
+                                                           regularization_amount = regularization_amount,
+                                                           log_dir = dirs[["log_dir"]]))
+  
+    # run gRNA precomputations
+    cat("Running perturbation precomputations. ")
+    foreach_funct(foreach::foreach(pod_id = seq(1, dicts[["gRNA"]])),
+                  run_gRNA_precomputation_at_scale(pod_id = pod_id,
+                                                   gRNA_precomp_dir = dirs[["gRNA_precomp_dir"]],
+                                                   combined_perturbation_matrix = combined_perturbation_matrix,
+                                                   covariate_matrix = covariate_matrix,
+                                                   log_dir = dirs[["log_dir"]],
+                                                   B = B,
+                                                   seed = seed))
+    cat(crayon::green(' \u2713\n'))
+  
+    # run at-scale analysis
+    cat("Running perturbation-to-gene association tests.")
+    foreach_funct(foreach::foreach(pod_id = seq(1, dicts[["pairs"]])),
+                  run_gRNA_gene_pair_analysis_at_scale(pod_id = pod_id,
+                                                       gene_precomp_dir = dirs[["gene_precomp_dir"]],
+                                                       gRNA_precomp_dir = dirs[["gRNA_precomp_dir"]],
+                                                       results_dir = dirs[["results_dir"]],
+                                                       log_dir = dirs[["log_dir"]],
+                                                       gene_matrix = gene_matrix,
+                                                       combined_perturbation_matrix = combined_perturbation_matrix,
+                                                       covariate_matrix = covariate_matrix,
+                                                       regularization_amount = regularization_amount,
+                                                       side = side,
+                                                       B = B,
+                                                       full_output))
+    cat(crayon::green(' \u2713\n'))
+    # collect results
+    cat("Collecting and returning results. ")
+    results <- collect_results(results_dir = dirs[["results_dir"]], gene_gRNA_group_pairs)
+    cat(crayon::green(' \u2713\n'))
+    return(results)
+  }
+  </code></pre>
+<p>The code for SCEPTRE testing. The function <code>frame2indmatrix</code> is the same as the function mentioned in GSFA testing part.</p>
+<pre class="r"><code>library(dplyr)
+library(sceptre)
+library(Seurat)
 
-SCREE preprocess --datatype ATAC --reference refdata-cellranger-arc-GRCh38-2020-A-2.0.0 --input /folder/of/the/fastq/ --sample /sample/name/of/the/fastq/ -c 8 -m 50 --output cellranger-ATAC --bin --binsize 5000 --process_n 10000 -l refdata-cellranger-arc-GRCh38-2020-A-2.0.0/star/chrNameLength.txt --para "--description test"
+#data preparation
 
-# sgRNA 
+sg_lib<- read.table("GSE90546/GSM2406677_10X005/sg_lib_all.txt", header=T)
+data<- readRDS("GSE90546/GSM2406677_10X005/RNA.rds")
 
-SCREE preprocess --datatype RNA --reference sgRNA_reference --input /folder/of/the/fastq/ --sample /sample/name/of/the/fastq/ -c 8 -m 50 --output cellranger-ATAC-sgRNA --para "--description test"
-</code></pre>
+#quality control
 
-<h2>
-  <strong>One command analysis</strong>
-</h2>
-<p>After alignment, users can perform all downstream analyses via the command line and generate a summary HTML file.</p>
-<pre class="bash"><code>SCREE analysis --type RNA --mtx cellranger-RNA/outs/filtered_feature_bc_matrix --sg_format 10X --prefix cellranger-RNA
-</code></pre>
+data<- subset(data, sgRNA_num != 0 & 
+                nFeature_RNA >= 200 & 
+                nCount_RNA >= 1000 &
+                percent.mt <= 10)
+data_qc <- CreateSeuratObject(count = data@assays$RNA@counts, min.cells = 0.01 * ncol(data))
+data_qc[["percent.mt"]] <- PercentageFeatureSet(data_qc, pattern = "^MT-")
+sg_num <- subset(data$sgRNA_num, names(data$sgRNA_num) %in% colnames(data_qc))
+perturbations<- subset(data$perturbations, names(data$perturbations) %in% colnames(data_qc))
 
+data_qc[["log_UMI"]]<- log(data_qc$nCount_RNA)
 
+sg_lib <- subset(sg_lib, cell %in% colnames(data_qc))
+sg_lib$gene <- gsub("NTC", "non-targeting", sg_lib$gene)
+sg_lib$barcode <- gsub("NTC_", "non-targeting_", sg_lib$barcode)
+
+#Create gene-sgRNA pairs
+
+l <- length(unique(sg_lib$gene))
+gene_id<- rep(rownames(data_qc), times = l)
+gRNA_id<- rep(unique(sg_lib$gene), each = nrow(data_qc))
+gene_gRNA_pairs<- data.frame(gene_id = gene_id, gRNA_group = gRNA_id)
+
+#Generate perturbation index matrix
+
+perturbation_matrix <- t(frame2indmatrix(sg_lib, data_qc))
+
+#Generate covariate matrix
+
+covariate_matrix <- data_qc[[c("log_UMI", "percent.mt")]]
+
+#Get sparse matrix
+
+expression_matrix <- data_qc@assays$RNA@counts
+
+sg_lib <- unique(sg_lib[, c("barcode", "gene")])
+grna_group_df <- data.frame(grna_id = sg_lib$barcode, grna_group = sg_lib$gene)
+
+rm(names = "l","sg_lib","data","data_qc","sg_num","perturbations")
+
+dir.create("comparison_results/sceptre_results")
+
+#Running SCEPTRE
+
+st<- Sys.time()
+result <- run_sceptre_high_moi2(storage_dir = "comparison_results/sceptre_results",
+                                gene_matrix = expression_matrix,
+                                combined_perturbation_matrix = perturbation_matrix,
+                                covariate_matrix = covariate_matrix,
+                                gene_gRNA_group_pairs = gene_gRNA_pairs,
+                                side = "both", 
+                                B = 2000,
+                                parallel = T)
+et<- Sys.time()
+print(et-st)
+    </code></pre>
+<p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
 <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
 </button>
